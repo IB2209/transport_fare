@@ -1,0 +1,20 @@
+Rails.application.routes.draw do
+  # ✅ ルート設定
+  root "fares#index"
+
+  # ✅ Deviseユーザー認証
+  devise_for :users
+
+  # ✅ 運賃（fares）リソース + 検索
+  resources :fares do
+    collection do
+      get :search  # /fares/search => fares#search
+    end
+  end
+
+  # ✅ 管理者用の名前空間ルーティング
+  namespace :admin do
+    resources :fares
+    resources :users
+  end
+end

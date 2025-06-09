@@ -1,0 +1,140 @@
+<h1 class="form-title">アカウント情報の編集</h1>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="form-group">
+    <%= f.label :name, "アカウント名" %>
+    <%= f.text_field :name, required: true %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :user_id, "ユーザーID" %>
+    <%= f.text_field :user_id, required: true %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :email, "メールアドレス" %>
+    <%= f.email_field :email, required: true, autocomplete: "email" %>
+  </div>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <div class="notice">現在確認待ち: <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :password, "新しいパスワード" %>
+    <%= f.password_field :password, autocomplete: "new-password" %>
+    <% if @minimum_password_length %>
+      <small class="hint">※ 最低 <%= @minimum_password_length %> 文字</small>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :password_confirmation, "新しいパスワード（確認）" %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :current_password, "現在のパスワード（確認用）" %>
+    <%= f.password_field :current_password, autocomplete: "current-password", required: true %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit "更新", class: "form-submit-button" %>
+  </div>
+<% end %>
+
+<div class="cancel-section">
+  <h3>アカウントを削除</h3>
+  <%= button_to "アカウントを削除", registration_path(resource_name), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn-delete" %>
+</div>
+
+<%= link_to "戻る", root_path, class: "btn-back" %>
+
+<style>
+.form-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin: 2rem 0;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+form {
+  max-width: 420px;
+  margin: 0 auto 2rem;
+  padding: 2rem;
+  border-radius: 10px;
+  background: #f9f9f9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.4rem;
+  color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.form-submit-button {
+  background-color: #2c3e50;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.form-submit-button:hover {
+  background-color: #1a252f;
+}
+
+.cancel-section {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background-color: #a71d2a;
+}
+
+.btn-back {
+  display: block;
+  text-align: center;
+  margin: 1rem auto 0;
+  text-decoration: underline;
+  color: #2c3e50;
+}
+</style>

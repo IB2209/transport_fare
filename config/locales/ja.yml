@@ -1,0 +1,14 @@
+ja:
+  enums:
+    user:
+      role:
+        general: 一般
+        staff: スタッフ
+        admin: 管理者
+
+  devise:
+    sessions:
+      signed_out: "ログアウトしました。"
+      signed_in: "ログインしました。"
+      user:
+        signed_in: "ログインしました。"

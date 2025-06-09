@@ -1,0 +1,157 @@
+<h1>
+  <button id="toggle-form" class="toggle-button">＋ 運賃登録</button>
+</h1>
+
+<div id="fare-form" style="display: none;">
+  <%= form_with model: @fare, local: true do |form| %>
+    <div>
+      <%= form.label :departure, "出発地" %><br>
+      <%= form.text_field :departure, required: true, placeholder: "例：東京" %>
+    </div>
+
+    <div>
+      <%= form.label :arrival, "到着地" %><br>
+      <%= form.text_field :arrival, required: true, placeholder: "例：大阪" %>
+    </div>
+
+    <div>
+      <%= form.label :distance, "距離" %><br>
+      <div class="input-with-unit">
+        <%= form.number_field :distance, required: true, placeholder: "100" %>
+        <span class="unit">km</span>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :small_price, "小型料金" %><br>
+      <div class="input-with-unit">
+        <%= form.number_field :small_price, required: true, placeholder: "30000" %>
+        <span class="unit">円</span>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :medium_price, "中型料金" %><br>
+      <div class="input-with-unit">
+        <%= form.number_field :medium_price, required: true, placeholder: "40000" %>
+        <span class="unit">円</span>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :large_price, "大型料金" %><br>
+      <div class="input-with-unit">
+        <%= form.number_field :large_price, required: true, placeholder: "50000" %>
+        <span class="unit">円</span>
+      </div>
+    </div>
+
+    <%= form.submit "登録" %>
+  <% end %>
+</div>
+
+<style>
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  color: #2c3e50;
+}
+
+form {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+form label {
+  display: block;
+  font-weight: bold;
+  margin-top: 1rem;
+  color: #2c3e50;
+}
+
+form input[type="text"],
+form input[type="tel"],
+form textarea,
+form input[type="number"] {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #2c3e50;
+}
+
+form textarea {
+  resize: vertical;
+}
+
+form input[type="submit"] {
+  display: block;
+  margin: auto;
+  margin-top: 1.5rem;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  background-color: #2c3e50;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form input[type="submit"]:hover {
+  background: rgb(219, 216, 52);
+  color: black;
+}
+
+.input-with-unit {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.input-with-unit input {
+  flex: 1;
+}
+
+.input-with-unit .unit {
+  white-space: nowrap;
+  font-size: 1rem;
+  color: #2c3e50;
+}
+
+.toggle-button {
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+.toggle-button:hover {
+  background: rgb(219, 216, 52);
+  color: black;
+  font-weight: bold;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const button = document.getElementById("toggle-form");
+  const form = document.getElementById("fare-form");
+
+  button.addEventListener("click", () => {
+    const isHidden = form.style.display === "none";
+    form.style.display = isHidden ? "block" : "none";
+    button.textContent = isHidden ? "－ 運賃登録" : "＋ 運賃登録";
+  });
+});
+</script>

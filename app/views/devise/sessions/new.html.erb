@@ -1,0 +1,113 @@
+<h1 class="login-title">ログイン</h1>
+
+<div class="login-wrapper">
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <div class="form-group">
+      <%= f.label :user_id, "ID" %>
+      <%= f.text_field :user_id, autofocus: true, required: true, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password, "パスワード" %>
+      <%= f.password_field :password, required: true, class: "form-control" %>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit "ログイン", class: "btn-login" %>
+    </div>
+  <% end %>
+
+  <div class="devise-links">
+    <%= link_to "パスワードをお忘れですか？", new_password_path(resource_name) %>
+    <%= link_to "アカウント作成", new_registration_path(resource_name) %>
+  </div>
+</div>
+
+<style>
+/* タイトル */
+.login-title {
+  text-align: center;
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+/* 全体ラッパー */
+.login-wrapper {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+/* ラベル・入力欄 */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #2c3e50;
+  box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.15);
+}
+
+/* ログインボタン */
+.btn-login {
+  width: 100%;
+  background-color: #2c3e50;
+  color: white;
+  padding: 0.7rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1.5rem;
+}
+
+.btn-login:hover {
+  background-color: #1a252f;
+}
+
+/* Deviseリンク */
+.devise-links {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.devise-links a {
+  display: block;
+  margin: 0.4rem 0;
+  color: #007bff;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.devise-links a:hover {
+  text-decoration: underline;
+}
+</style>

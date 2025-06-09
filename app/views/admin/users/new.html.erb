@@ -1,0 +1,117 @@
+<h1 class="form-title">新規ユーザー登録</h1>
+
+<div class="form-wrapper">
+  <%= form_with model: @user, url: admin_users_path, local: true do |f| %>
+    <% if @user.errors.any? %>
+      <div class="error-messages">
+        <h2>エラーがあります</h2>
+        <ul>
+          <% @user.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :name, "アカウント名" %>
+      <%= f.text_field :name, required: true, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :user_id, "ユーザーID" %>
+      <%= f.text_field :user_id, required: true, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :email, "メールアドレス" %>
+      <%= f.email_field :email, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password, "パスワード" %>
+      <%= f.password_field :password, required: true, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password_confirmation, "パスワード（確認）" %>
+      <%= f.password_field :password_confirmation, required: true, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :role, "権限" %>
+      <%= f.select :role, User.roles.keys.map { |r| [I18n.t("enums.user.role.#{r}"), r] }, {}, class: "form-control" %>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit "登録する", class: "form-submit-button" %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+.form-wrapper {
+  max-width: 480px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fefefe;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box; /* ✅ 追加 */
+}
+
+.form-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.4rem;
+  color: #2c3e50;
+}
+
+.form-control {
+  width: 100%; /* ✅ 必須 */
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box; /* ✅ 右側はみ出し対策 */
+}
+
+.form-submit-button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #2c3e50;
+  color: white;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-submit-button:hover {
+  background-color: #1a252f;
+}
+
+.error-messages {
+  color: #dc3545;
+  background: #f8d7da;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+
+</style>

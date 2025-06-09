@@ -1,0 +1,122 @@
+<h1 class="form-title">運賃詳細</h1>
+
+<div class="back-button">
+  <%= link_to "戻る", fares_path, class: "btn-back" %>
+</div>
+
+<div class="fare-wrapper">
+  <p><strong>出発地：</strong> <%= @fare.departure %></p>
+  <p><strong>ふりがな：</strong> <%= @fare.departure_furigana.presence || "未登録" %></p>
+  <p><strong>到着地：</strong> <%= @fare.arrival %></p>
+  <p><strong>ふりがな：</strong> <%= @fare.arrival_furigana.presence || "未登録" %></p>
+  <p><strong>距離：</strong>
+    <%= @fare.distance.present? ? "#{@fare.distance} km" : "未登録" %>
+  </p>
+  <p><strong>小型料金：</strong>
+    <%= number_to_currency(@fare.fare_small, unit: "\u00a5", precision: 0) %>
+  </p>
+  <p><strong>中型料金：</strong>
+    <%= number_to_currency(@fare.fare_medium, unit: "\u00a5", precision: 0) %>
+  </p>
+  <p><strong>大型料金：</strong>
+    <%= number_to_currency(@fare.fare_large, unit: "\u00a5", precision: 0) %>
+  </p>
+
+  <div class="action-buttons">
+    <%= link_to edit_fare_path(@fare), class: "btn-icon edit", title: "編集" do %>
+      <i class="fas fa-pen"></i> 編集
+    <% end %>
+
+    <%= link_to fare_path(@fare), method: :delete, data: { confirm: "本当に削除しますか？" },
+      class: "btn-icon delete", title: "削除" do %>
+      <i class="fas fa-trash-alt"></i> 削除
+    <% end %>
+  </div>
+</div>
+
+<style>
+  .form-title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin: 2rem 0;
+    color: #2c3e50;
+    font-weight: bold;
+    font-family: "Noto Sans JP", sans-serif;
+  }
+
+  .fare-wrapper {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  p {
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  strong {
+    display: inline-block;
+    width: 160px;
+    color: #2c3e50;
+  }
+
+  .action-buttons {
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  .btn-icon {
+    display: inline-block;
+    max-width: 150px;
+    width: 100%;
+    margin: 0.5rem 1rem;
+    padding: 0.8rem 1.2rem;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    background-color: rgb(99, 99, 99);
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-icon.edit:hover {
+    background-color: #3d8b5a;
+  }
+
+  .btn-icon.delete:hover {
+    background-color: #8e2e2e;
+  }
+
+  .btn-icon i {
+    margin-right: 0.4rem;
+  }
+
+  .back-button {
+    max-width: 720px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .btn-back {
+    background-color: #4b5866;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1rem;
+    display: inline-block;
+    min-width: 100px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-back:hover {
+    background-color: #3a454f;
+  }
+</style>

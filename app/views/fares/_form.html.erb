@@ -1,0 +1,47 @@
+<%= form_with(model: fare) do |form| %>
+  <% if fare.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(fare.errors.count, "error") %> prohibited this fare from being saved:</h2>
+
+      <ul>
+        <% fare.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :departure, style: "display: block" %>
+    <%= form.text_field :departure %>
+  </div>
+
+  <div>
+    <%= form.label :arrival, style: "display: block" %>
+    <%= form.text_field :arrival %>
+  </div>
+
+  <div>
+    <%= form.label :distance, style: "display: block" %>
+    <%= form.text_field :distance %>
+  </div>
+
+  <div>
+    <%= form.label :fare_small, style: "display: block" %>
+    <%= form.number_field :fare_small %>
+  </div>
+
+  <div>
+    <%= form.label :fare_medium, style: "display: block" %>
+    <%= form.number_field :fare_medium %>
+  </div>
+
+  <div>
+    <%= form.label :fare_large, style: "display: block" %>
+    <%= form.number_field :fare_large %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

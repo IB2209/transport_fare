@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  departure: MyString
+  arrival: MyString
+  distance: 1.5
+  fare_small: 1
+  fare_medium: 1
+  fare_large: 1
+
+two:
+  departure: MyString
+  arrival: MyString
+  distance: 1.5
+  fare_small: 1
+  fare_medium: 1
+  fare_large: 1

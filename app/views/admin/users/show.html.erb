@@ -1,0 +1,147 @@
+<h1 class="admin-title">アカウント詳細</h1>
+
+<div class="show-wrapper">
+  <table class="show-table">
+    <tr>
+      <th>アカウント名</th>
+      <td><%= @user.name %></td>
+      <td><%= link_to edit_admin_user_path(@user, field: "name"), class: "btn-edit-icon", title: "編集" do %>
+        <i class="fas fa-pen"></i>
+      <% end %></td>
+    </tr>
+    <tr>
+      <th>ユーザーID</th>
+      <td><%= @user.user_id %></td>
+      <td><%= link_to edit_admin_user_path(@user, field: "user_id"), class: "btn-edit-icon", title: "編集" do %>
+        <i class="fas fa-pen"></i>
+      <% end %></td>
+    </tr>
+    <tr>
+      <th>メールアドレス</th>
+      <td><%= @user.email %></td>
+      <td><%= link_to edit_admin_user_path(@user, field: "email"), class: "btn-edit-icon", title: "編集" do %>
+        <i class="fas fa-pen"></i>
+      <% end %></td>
+    </tr>
+    <tr>
+      <th>パスワード</th>
+      <td>********</td>
+      <td><%= link_to edit_admin_user_path(@user, field: "password"), class: "btn-edit-icon", title: "編集" do %>
+        <i class="fas fa-pen"></i>
+      <% end %></td>
+    </tr>
+    <tr>
+  <th>権限</th>
+  <td><%= @user.role.present? ? I18n.t("enums.user.role.#{@user.role}") : "未設定" %></td>
+  <td><%= link_to edit_admin_user_path(@user, field: "role"), class: "btn-edit-icon", title: "編集" do %>
+    <i class="fas fa-pen"></i>
+  <% end %></td>
+</tr>
+  </table>
+
+  <div class="back-button">
+  <%= link_to "戻る", admin_users_path, class: "btn-back" %>
+  <%= link_to admin_user_path(@user),
+              data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" },
+              class: "btn-delete" do %>
+    <i class="fas fa-trash-alt"></i> アカウント削除
+  <% end %>
+</div>
+
+
+<!-- フォントアイコン（Font Awesome）読み込みがなければ追加 -->
+<%= stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css", media: "all" %>
+
+<style>
+.admin-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin: 2rem 0 1rem;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+.show-wrapper {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.show-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.show-table th {
+  text-align: left;
+  width: 30%;
+  padding: 0.8rem;
+  background: #f0f0f0;
+  font-weight: bold;
+  color: #2c3e50;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+
+.show-table td {
+  padding: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  vertical-align: middle;
+}
+
+.btn-edit-icon {
+  font-size: 1rem;
+  color: #007bff;
+  text-decoration: none;
+  padding-left: 0.5rem;
+}
+.btn-edit-icon:hover {
+  color: #0056b3;
+}
+
+.back-button {
+  text-align: center;
+  margin-top: 2rem;
+}
+.btn-back {
+  background-color: #2c3e50;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+.btn-back:hover {
+  background-color: #1a252f;
+}
+
+.back-button {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.btn-back,
+.btn-delete {
+  display: inline-block;
+  margin: 0 0.5rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
+.btn-delete:hover {
+  background-color: #a71d2a;
+}
+
+</style>

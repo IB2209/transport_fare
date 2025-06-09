@@ -1,0 +1,326 @@
+<!-- 完全検索対応版 HTML + JavaScript -->
+<div class="max480">
+  <h1 class="tab-title" style="text-align: center;">搬送料検索</h1>
+
+  <%= form_with url: search_fares_path, method: :get, local: true do %>
+    <div class="search-form">
+      <div class="label">
+        <label>　- 出発地 -</label>
+        <select name="departure" id="departure_id" class="pad searchable-select">
+          <option value="" <%= "selected" if params[:departure].blank? %>>選択してください</option>
+          <option value="all" <%= "selected" if params[:departure] == "all" %>>全て</option>
+          <% @grouped_departure_options.each do |group, options| %>
+            <optgroup label="<%= group %>">
+              <% options.each do |option| %>
+                <option value="<%= option[:value] %>" data-furigana="<%= option[:furigana] %>" <%= "selected" if params[:departure] == option[:value] %>>
+                  <%= option[:label] %>
+                </option>
+              <% end %>
+            </optgroup>
+          <% end %>
+        </select>
+      </div>
+
+      <div class="label">
+        <label>　- 到着地 -</label>
+        <select name="arrival" id="arrival_id" class="pad searchable-select">
+          <option value="" <%= "selected" if params[:arrival].blank? %>>選択してください</option>
+          <option value="all" <%= "selected" if params[:arrival] == "all" %>>全て</option>
+          <% @grouped_arrival_options.each do |group, options| %>
+            <optgroup label="<%= group %>">
+              <% options.each do |option| %>
+                <option value="<%= option[:value] %>" data-furigana="<%= option[:furigana] %>" <%= "selected" if params[:arrival] == option[:value] %>>
+                  <%= option[:label] %>
+                </option>
+              <% end %>
+            </optgroup>
+          <% end %>
+        </select>
+      </div>
+
+      <div class="label">
+        <% if params[:departure].present? || params[:arrival].present? %>
+          <%= link_to "リセット", search_fares_path, class: "btn-reset" %>
+        <% end %>
+        <%= submit_tag "検索", class: "btn" %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if params[:departure].present? || params[:arrival].present? %>
+    <% if @grouped_fares.blank? %>
+      <p class="no-results">該当する運賃データはありません</p>
+    <% else %>
+      <% @grouped_fares.each do |(departure, arrival), fares| %>
+        <div class="fare-card">
+          <div class="fare-header">
+            <span class="fare-route"><%= departure %> ▶︎ <%= arrival %></span>
+          </div>
+          <div class="fare-prices">
+            <% fares.each do |fare| %>
+              <div class="fare-row">
+                <strong>小型:</strong> <%= number_to_currency(fare.fare_small, unit: "\u00a5", precision: 0) %> /
+                <strong>中型:</strong> <%= number_to_currency(fare.fare_medium, unit: "\u00a5", precision: 0) %> /
+                <strong>大型:</strong> <%= number_to_currency(fare.fare_large, unit: "\u00a5", precision: 0) %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+
+<style>
+/* ===== 全体コンテナ ===== */
+.max480 {
+  max-width: 480px;
+  margin: auto;
+  padding: 1rem;
+  background: #fbfbfb;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  color: #2c3e50;
+}
+
+/* ===== 検索フォーム全体 ===== */
+.search-form {
+  margin-bottom: 1.5rem;
+  color: rgb(55, 55, 55);
+}
+
+.label {
+  margin-top: 25px;
+}
+
+label {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+}
+
+/* ===== セレクトボックス ===== */
+select.pad {
+  padding: 1rem;
+  width: 100%;
+  font-size: 0.95rem;
+  appearance: none;
+  background-color: #fff;
+  border: 1px solid #2c3e50;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: rgb(60, 60, 60);
+  font-weight: bold;
+}
+
+/* プレースホルダーの見た目調整 */
+select.pad option[value=""] {
+  font-weight: 400 !important;
+  color: #999;
+}
+
+/* ===== ボタン ===== */
+.btn {
+  display: block;
+  padding: 0.8rem 4rem;
+  margin: 2rem auto;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: rgb(53, 75, 96);
+  font-weight: bold;
+}
+
+.btn-reset {
+  display: inline-block;
+  margin: 0.5rem 0.5rem -1rem;
+  background-color: gray;
+  color: white;
+  border: none;
+  padding: 0.3rem 1rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-reset:hover {
+  background-color: #999;
+  font-weight: bold;
+}
+
+/* ===== 結果表示 ===== */
+.no-results {
+  text-align: center;
+  margin: 2rem 0;
+  color: #888;
+}
+
+.fare-card {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1rem 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.fare-header {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.fare-route {
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.fare-distance {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.fare-prices div {
+  margin: 0.3rem 0;
+}
+
+.fare-prices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fare-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: start;
+}
+
+/* ===== モバイル対応（480px以下） ===== */
+@media (max-width: 480px) {
+  .fare-row {
+    display: block;
+  }
+
+  .fare-row strong {
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .select2-search--dropdown .select2-search__field {
+    background: #fff !important;
+    color: black !important;
+    height: 2rem !important;
+    font-size: 1rem !important;
+  }
+}
+
+/* ===== Select2 カスタマイズ ===== */
+.select2-container--default .select2-selection--single {
+  height: 45px;
+  padding: 10px 14px;
+  border: 1px solid #2c3e50;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 1rem;
+  color: #333;
+  box-shadow: none;
+  transition: border-color 0.3s ease;
+}
+
+.select2-container--default .select2-selection--single:focus,
+.select2-container--default .select2-selection--single:active {
+  border-color: #007bff;
+  outline: none;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 100%;
+  right: 10px;
+  top: 0;
+  width: 30px;
+}
+
+.select2-search--dropdown .select2-search__field {
+  padding: 0.6rem;
+  font-size: 0.95rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.select2-container--default .select2-results > .select2-results__options {
+  font-size: 0.95rem;
+  padding: 0.2rem;
+}
+
+.select2-results__option--highlighted[aria-selected] {
+  background-color: #007bff !important;
+  color: white;
+}
+
+.select2-container--default .select2-results__group {
+  font-weight: bold;
+  color: #2c3e50;
+  background: #f0f0f0;
+  padding: 6px 10px;
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
+</style>
+
+<script>
+  function toHiragana(str) {
+    return str.replace(/[\u30a1-\u30f6]/g, function (match) {
+      return String.fromCharCode(match.charCodeAt(0) - 0x60);
+    });
+  }
+
+  function customMatcher(params, data) {
+    if ($.trim(params.term) === '') return data;
+
+    const term = toHiragana(params.term.toLowerCase().normalize("NFKC"));
+    const text = toHiragana((data.text || '').toLowerCase().normalize("NFKC"));
+    const furigana = toHiragana((data.element?.dataset?.furigana || '').toLowerCase().normalize("NFKC"));
+
+    if (text.includes(term) || furigana.includes(term)) return data;
+    return null;
+  }
+
+  function initSelect2() {
+    $('.searchable-select').select2({
+      width: '100%',
+      placeholder: "選択してください",
+      matcher: customMatcher,
+      minimumResultsForSearch: 0,
+      minimumInputLength: 0,
+      language: {
+        inputTooShort: () => "キーワードを入力",
+        noResults: () => "一致する項目が見つかりません",
+        searching: () => "検索中…"
+      }
+    });
+
+    $('.searchable-select').on('select2:open', () => {
+      setTimeout(() => {
+        $('.select2-search__field').attr('placeholder', '検索（ひらがな・漢字）');
+      }, 0);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", initSelect2);
+  document.addEventListener("turbo:load", initSelect2);
+</script>

@@ -1,0 +1,231 @@
+/*
+ * This is a manifest file that'll be compiled into application.css.
+ *
+ * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
+ * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
+ * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
+ * depending on specificity.
+ *
+ * Consider organizing styles into separate files for maintainability.
+ */
+
+ body{
+  font-family: "Noto Sans JP", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  background-color: #f5f4f4;
+}
+
+
+/*---------------------- sidebar ---------------------------*/
+
+/* ヘッダー（オプション） */
+header {
+  width: 200px;
+}
+
+/* サイドバー本体 */
+/* ---------------- サイドバー共通スタイル ---------------- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100vh;
+  background: linear-gradient(180deg, #2c3e50, #34495e);
+  color: white;
+  padding-top: 2rem;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+  border-right: 1px solid #4a6c82;
+}
+
+/* アニメーション効果：非表示時は左にスライド */
+.sidebar.hidden {
+  transform: translateX(-100%);
+}
+
+/* サイドバー内ロゴやタイトル */
+.sidebar h2 {
+  color: #ecf0f1;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.4rem;
+}
+
+/* メニューリスト */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* メニュー項目 */
+.sidebar li {
+  border-top: 1px solid #4a6c82;
+}
+
+/* 最後のボーダー消す */
+.sidebar li:last-child {
+  border-bottom: 1px solid #4a6c82;
+}
+
+/* リンクの装飾 */
+.sidebar a {
+  display: flex;
+  align-items: center;
+  color: #ecf0f1;
+  text-decoration: none;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  transition: background 0.3s ease, color 0.3s ease, padding 0.3s ease;
+}
+
+.sidebar a:hover {
+  background: #3c5972;
+  color: #fff;
+}
+
+/* 通常時の余白とアイコン位置 */
+.sidebar.expanded a {
+  justify-content: flex-start;
+  padding: 15px 20px;
+}
+
+.sidebar.expanded a img {
+  margin-right: 10px;
+}
+
+
+/* アイコンサイズ */
+.sidebar a img {
+  width: 22px;
+  height: 22px;
+  margin-right: 10px;
+  filter: brightness(1.2);
+  transition: margin 0.3s ease;
+}
+
+/* サイドバー開閉ボタン */
+.sidebar-toggle-btn {
+  position: absolute;
+  top: 10px;
+  left: 1rem;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 1001;
+  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+}
+
+.sidebar-toggle-btn:hover {
+  opacity: 0.8;
+}
+
+/* サイドバーが縮小されたときのスタイル */
+.sidebar.collapsed {
+  width: 50px;
+  overflow-x: hidden;
+  padding-top: 2rem;
+}
+
+/* メニュー項目の高さは維持 */
+.sidebar.collapsed ul li {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 見出し h2 も非表示（管理画面） */
+.sidebar.collapsed h2 {
+  visibility: hidden;     /* 中身だけ非表示 */
+  height: 2rem;           /* 元の高さに合わせる（調整可） */
+  margin-bottom: 2rem;    /* 下マージンも維持 */
+}
+
+
+/* アイコン中央寄せ */
+.sidebar.collapsed a {
+  justify-content: center;
+  padding: 15px 20px;
+}
+
+/* アイコンの位置調整 */
+.sidebar.collapsed a img {
+  margin: 0 auto !important;
+  display: block;
+}
+
+
+
+.sidebar.collapsed a span {
+  display: none;
+}
+
+
+/* メインコンテンツの移動（通常時） */
+body.with-sidebar .main-content {
+  margin-left: 220px;
+  padding: 1.5rem;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* サイドバーが collapsed（縮小）されたとき */
+body.with-sidebar.collapsed .main-content {
+  margin-left: 50px;
+}
+
+@media (max-width: 480px) {
+  body.with-sidebar .main-content {
+    padding: 5px;
+  }
+}
+
+
+/* ---------------- メディアクエリ：768px未満では非表示 ---------------- */
+
+
+
+@media screen and (max-width: 767px) {
+  .sidebar {
+    display: none !important;
+  }
+
+  body.with-sidebar {
+    padding-left: 0 !important;
+  }
+
+  .with-sidebar .main-content {
+    margin-left: 0 !important;  /* ✅ ここを追加 */
+    padding: 0.1rem;
+  }
+}
+
+
+.flash.notice {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 1rem auto;
+  max-width: 600px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.flash.alert {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 1rem auto;
+  max-width: 600px;
+  text-align: center;
+  font-weight: bold;
+}
