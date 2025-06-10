@@ -32,6 +32,16 @@
     <!-- ✅ アプリケーション用JS（importmap + module対応） -->
     <%= javascript_importmap_tags %>
     <%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload", defer: true %>
+
+    <style>
+    body{
+  font-family: "Noto Sans JP", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  background-color: #f5f4f4;
+}
+    </style>
   </head>
 
 

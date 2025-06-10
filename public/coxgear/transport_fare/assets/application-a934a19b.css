@@ -1,41 +1,22 @@
-<% if user_signed_in? && (current_user.staff? || current_user.admin?) %>
-  <div id="sidebar" class="sidebar expanded">
-    <!-- ▼ 切り替えボタン -->
-    <button id="toggleSidebar" class="sidebar-toggle-btn" title="メニューを折りたたむ">
-      <i id="toggle-icon" class="fas fa-angle-left"></i>
-    </button>
+/*
+ * This is a manifest file that'll be compiled into application.css.
+ *
+ * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
+ * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
+ * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
+ * depending on specificity.
+ *
+ * Consider organizing styles into separate files for maintainability.
+ */
 
-    <h2>管理画面</h2>
-    <ul>
-      <li><%= link_to image_tag("fare.svg") + content_tag(:span, "搬送料検索"), search_fares_path %></li>
-      <li><%= link_to image_tag("fare_mane.png") + content_tag(:span, "搬送料管理"), fares_path %></li>
-      <% if current_user.admin? %>
-        <li><%= link_to image_tag("account.svg") + content_tag(:span, "アカウント管理"), admin_users_path %></li>
-      <% end %>
-    </ul>
-  </div>
+ body{
+  font-family: "Noto Sans JP", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  background-color: #f5f4f4;
+}
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const sidebar = document.getElementById("sidebar");
-      const toggleBtn = document.getElementById("toggleSidebar");
-      const toggleIcon = document.getElementById("toggle-icon");
-
-      if (sidebar && toggleBtn && toggleIcon) {
-        toggleBtn.addEventListener("click", function() {
-          const isCollapsed = sidebar.classList.toggle("collapsed");
-          document.body.classList.toggle("collapsed", isCollapsed);
-
-          toggleIcon.classList.toggle("fa-angle-left", !isCollapsed);
-          toggleIcon.classList.toggle("fa-angle-right", isCollapsed);
-          toggleBtn.title = isCollapsed ? "メニューを展開" : "メニューを折りたたむ";
-        });
-      }
-    });
-  </script>
-<% end %>
-
-<style>
 
 /*---------------------- sidebar ---------------------------*/
 
@@ -248,4 +229,3 @@ body.with-sidebar.collapsed .main-content {
   text-align: center;
   font-weight: bold;
 }
-</style>
