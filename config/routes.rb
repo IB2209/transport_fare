@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   scope Rails.application.config.relative_url_root || "/" do
   # ✅ ルート設定
-  root "fares#index"
+  root "fares#search"
 
   # ✅ Deviseユーザー認証
   devise_for :users
