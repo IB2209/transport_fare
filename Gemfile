@@ -17,6 +17,9 @@ gem "thruster", require: false
 gem "devise"
 gem "moji"
 
+gem 'dotenv-rails', groups: [:development, :test, :production]
+
+
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]  # ← ✅ require: "debug/prelude" を削除
   gem "brakeman", require: false
