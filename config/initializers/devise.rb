@@ -25,5 +25,14 @@ Devise.setup do |config|
   # ✅ ActiveRecord使用
   require 'devise/orm/active_record'
 
+  # config/initializers/devise.rb
+  require Rails.root.join("lib/custom_failure_app")
+
+    Devise.setup do |config|
+    # 既存の設定の後に追記
+      config.warden do |manager|
+        manager.failure_app = CustomFailureApp
+      end
+    end
 
 end
