@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+
+  scope Rails.application.config.relative_url_root || "/" do
   # ✅ ルート設定
   root "fares#index"
 
@@ -16,5 +18,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :fares
     resources :users
+  end
+
   end
 end

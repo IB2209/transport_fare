@@ -1,6 +1,12 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+
+  config.relative_url_root = "/coxgear/transport_fare"
+  -config.assets.prefix = "/coxgear/transport_fare/assets"
+
+  config.public_file_server.enabled = true
+  config.action_controller.relative_url_root = "/coxgear/transport_fare"
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Make code changes take effect immediately without server restart.
