@@ -5,6 +5,13 @@ Rails.application.configure do
   config.action_controller.relative_url_root = "/coxgear/transport_fare"
   config.assets.prefix = "/coxgear/transport_fare/assets"
   
+  # ログ出力先を production.log に
+  config.logger = ActiveSupport::TaggedLogging.new(
+  Logger.new(Rails.root.join("log", "production.log"), 'daily') # ← 'daily'でローテーション
+  )
+  
+  # ログレベルを明示
+  config.log_level = :info
 
   # 本番ではコードはリロードしない（高速化）
   config.enable_reloading = false

@@ -12,3 +12,7 @@ ja:
       signed_in: "ログインしました。"
       user:
         signed_in: "ログインしました。"
+        
+  errors:
+    messages:
+      confirmation: "確認用のパスワードと一致しません"
