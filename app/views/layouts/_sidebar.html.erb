@@ -7,8 +7,8 @@
 
     <h2>管理画面</h2>
     <ul>
-      <li><%= link_to image_tag("fare.svg") + content_tag(:span, "搬送料検索"), search_fares_path %></li>
-      <li><%= link_to image_tag("fare_mane.png") + content_tag(:span, "搬送料管理"), fares_path %></li>
+      <li><%= link_to image_tag("fare.svg") + content_tag(:span, "陸送料検索"), search_fares_path %></li>
+      <li><%= link_to image_tag("fare_mane.png") + content_tag(:span, "陸送料管理"), fares_path %></li>
       <% if current_user.admin? %>
         <li><%= link_to image_tag("account.svg") + content_tag(:span, "アカウント管理"), admin_users_path %></li>
       <% end %>
