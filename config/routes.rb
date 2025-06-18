@@ -20,5 +20,9 @@ Rails.application.routes.draw do
     resources :users
   end
 
+  resources :fares do
+    collection { post :import }
+  end  
+
   end
 end

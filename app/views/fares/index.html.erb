@@ -75,6 +75,18 @@
 
     <%= form.submit "登録" %>
   <% end %>
+  <div class="csv-upload-form">
+  <h2>CSVファイルで登録</h2>
+  <%= form_with url: import_fares_path, local: true, multipart: true do |form| %>
+    <div>
+      <%= form.label :file, "CSVファイルを選択" %>
+      <%= form.file_field :file %>
+    </div>
+    <%= form.submit "インポート" %>
+  <% end %>
+</div>
+
+
 </div>
 
 <h2 class="fare">登録済陸送料一覧</h2>
@@ -468,6 +480,53 @@ thead th.sort-desc a::after {
     background-color: #999;
     color: white;
   }
+
+.csv-upload-form {
+  margin: 2rem auto;
+  padding: 1.5rem;
+  max-width: 600px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.csv-upload-form h2 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.csv-upload-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.csv-upload-form input[type="file"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.csv-upload-form input[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.csv-upload-form input[type="submit"]:hover {
+  background-color: #1a252f;
+}
+
 
 </style>
 <script>

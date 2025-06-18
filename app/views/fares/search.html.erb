@@ -1,5 +1,8 @@
-<!-- 完全検索対応版 HTML + JavaScript -->
+
 <div class="max480">
+  <div class="fare-logo-top">
+    <%= image_tag("logo.jpg", alt: "ロゴ", class: "fare-logo-img") %>
+  </div>
   <h1 class="tab-title" style="text-align: center;">陸送料検索</h1>
 
   <%= form_with url: search_fares_path, method: :get, local: true do %>
@@ -279,6 +282,18 @@ select.pad option[value=""] {
   margin-top: 4px;
   font-size: 0.9rem;
 }
+
+.fare-logo-top {
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.fare-logo-img {
+  width: 120px;
+  height: auto;
+  opacity: 0.95;
+}
+
 
 </style>
 

@@ -35,6 +35,15 @@ class FaresController < ApplicationController
     @grouped_arrival_options = grouped_furigana_options(:arrival, :arrival_furigana)
   end
 
+  def import
+    if params[:file].present?
+      CsvImporter::FareImporter.import(params[:file])
+      redirect_to fares_path, notice: "CSVからインポートしました"
+    else
+      redirect_to fares_path, alert: "CSVファイルを選択してください"
+    end
+  end
+
   def create
     @fare = Fare.new(fare_params)
     set_furigana_if_blank(@fare)

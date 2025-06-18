@@ -18,6 +18,10 @@
         <% end %>
       </li>
     </ul>
+    <!-- ▼ ロゴ画像の追加部分 -->
+    <div class="sidebar-logo">
+      <%= image_tag("logo.jpg", alt: "ロゴ", class: "sidebar-logo-img") %>
+    </div>
   </div>
 
   <script>
@@ -209,6 +213,21 @@ body.with-sidebar.collapsed .main-content {
   body.with-sidebar .main-content {
     padding: 5px;
   }
+}
+
+.sidebar-logo {
+  text-align: center;
+  padding: 2rem 0 1rem;
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.sidebar-logo-img {
+  width: 200px;
+  height: auto;
+  opacity: 0.9;
 }
 
 
