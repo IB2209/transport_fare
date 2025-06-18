@@ -16,3 +16,4 @@ ja:
   errors:
     messages:
       confirmation: "確認用のパスワードと一致しません"
+      record_invalid: "バリデーションに失敗しました: %{errors}"
