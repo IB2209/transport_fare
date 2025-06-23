@@ -9,7 +9,11 @@ module ApplicationHelper
     css_class += " sort-asc" if current_column == column && current_direction == "asc"
     css_class += " sort-desc" if current_column == column && current_direction == "desc"
 
-    # ソートリンクを生成（既存の検索条件も保持）
-    link_to label, params.permit(:departure, :arrival).merge(sort: column, direction: new_direction), class: css_class
+    # anonymous パラメータを含めて現在の状態を保持
+    permitted_params = params.permit(:departure, :arrival, :anonymous)
+    link_params = permitted_params.merge(sort: column, direction: new_direction)
+
+    # ソートリンクを生成
+    link_to label, link_params, class: css_class
   end
 end

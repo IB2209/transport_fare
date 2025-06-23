@@ -221,7 +221,7 @@ body {
   color: #2c3e50;
 }
 
-hr{
+hr {
   margin: 2rem 0;
 }
 
@@ -265,7 +265,6 @@ form label {
   font-weight: bold;
   margin-top: 1rem;
   color: #2c3e50;
-  
 }
 
 form input[type="text"],
@@ -346,7 +345,6 @@ form input[type="submit"]:hover {
   font-size: 0.9rem;
 }
 
-
 /* 検索・リセットボタン横並び */
 .button-group {
   display: flex;
@@ -414,13 +412,15 @@ td[rowspan] {
 thead {
   background-color: #2c3e50;
   color: white;
-  border-bottom: none;
+  border-bottom: 2px solid #ccc; /* 見やすくするために追加 */
 }
+
 thead th {
   font-weight: bold;
-  border: none;
+  border: 1px solid #ccc; /* 個別セルのボーダーも */
   white-space: nowrap;
 }
+
 thead th a {
   color: white;
   text-decoration: none;
@@ -428,27 +428,36 @@ thead th a {
   padding-right: 1.2rem;
   position: relative;
 }
+
 a.sortable::after {
   content: "⇅";
   font-size: 0.75rem;
   margin-left: 0.4rem;
   opacity: 0.5;
+  position: relative;
+  top: -1px;
 }
+
 a.sort-asc::after {
   content: "▲";
   color: #ffd700;
   font-size: 0.75rem;
   margin-left: 0.4rem;
+  position: relative;
+  top: -1px;
 }
+
 a.sort-desc::after {
   content: "▼";
   color: #ffd700;
   font-size: 0.75rem;
   margin-left: 0.4rem;
+  position: relative;
+  top: -1px;
 }
 
-thead th.sort-desc a::after {
-  content: "▼";
+thead th a:hover {
+  text-decoration: underline;
   color: #ffd700;
 }
 
@@ -480,7 +489,7 @@ thead th.sort-desc a::after {
 /* 🔹 ボタンをインライン並びに */
 .button-group-inline {
   display: inline-flex;
-  align-items: flex-start; /* 上揃えに変更 */
+  align-items: flex-start;
   gap: 0.5rem;
   justify-content: center;
   margin-top: 0.5rem;
@@ -505,23 +514,23 @@ thead th.sort-desc a::after {
 }
 
 .btn-reset-inline {
-    background-color: gray;
-    margin-top: 32px; /* 🔄 検索ボタンと揃えるために修正 */
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    transition: 0.2s ease;
-    color: white;
-    text-decoration: none;
-  }
+  background-color: gray;
+  margin-top: 32px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s ease;
+  color: white;
+  text-decoration: none;
+}
 
-  .btn-reset-inline:hover {
-    background-color: #999;
-    color: white;
-  }
+.btn-reset-inline:hover {
+  background-color: #999;
+  color: white;
+}
 
 .csv-upload-form {
   margin: 2rem auto;
@@ -567,7 +576,10 @@ thead th.sort-desc a::after {
 
 .csv-upload-form input[type="submit"]:hover {
   background-color: #1a252f;
+  color: white; 
 }
+
+/* タブリスト（黒丸除去） */
 .fare-tabs {
   text-align: center;
   margin-top: 2rem;
@@ -575,9 +587,10 @@ thead th.sort-desc a::after {
 }
 
 .tab-list {
-  list-style: none;
+  list-style: none; /* ✅ 黒丸を削除 */
   display: inline-block;
   padding: 0;
+  margin: 0;
 }
 
 .tab-list li {

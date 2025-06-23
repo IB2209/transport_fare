@@ -21,9 +21,9 @@ class FaresController < ApplicationController
   
     # 距離別（匿名）モードか地点別モードかで処理分岐
     if params[:anonymous] == "true"
-      # 匿名モード（距離ベースのデータを表示：出発・到着が空のもの）
+      # ✅ 距離別（出発地・到着地が空）→ 距離昇順で固定表示
       @fares = Fare.where(departure: [nil, ''], arrival: [nil, ''])
-                   .order("#{sort_column} #{sort_direction}")
+                   .order(:distance)
     else
       # 地点別運賃モード（出発・到着が存在するデータ）
       @fares = Fare.where.not(departure: [nil, ''], arrival: [nil, ''])

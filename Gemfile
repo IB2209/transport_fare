@@ -13,7 +13,8 @@ gem "kamal", require: false
 gem "thruster", require: false
 gem "devise"
 gem "moji"
-
+gem "csv"
+gem "nkf"
 gem 'dotenv-rails', groups: [:development, :test, :production]
 
 
