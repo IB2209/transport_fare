@@ -75,18 +75,33 @@
 
     <%= form.submit "登録" %>
   <% end %>
-  <div class="csv-upload-form">
-  <h2>CSVファイルで登録</h2>
+
+
+  <!-- 地点CSVフォーム -->
+<div class="csv-upload-form">
+  <h2>地点CSVで登録</h2>
   <%= form_with url: import_fares_path, local: true, multipart: true do |form| %>
     <div>
-      <%= form.label :file, "CSVファイルを選択" %>
+      <%= form.label :file, "地点CSVファイルを選択" %>
       <%= form.file_field :file %>
     </div>
     <%= form.submit "インポート" %>
   <% end %>
 </div>
 
+<!-- 距離CSVフォーム -->
+<div class="csv-upload-form">
+  <h2>距離CSVで登録</h2>
+  <%= form_with url: import_distance_csv_fares_path, local: true, multipart: true do |form| %>
+    <div>
+      <%= form.label :file, "距離CSVファイルを選択" %>
+      <%= form.file_field :file %>
+    </div>
+    <%= form.submit "インポート" %>
+  <% end %>
+</div>
 
+  
 </div>
 
 <h2 class="fare">登録済陸送料一覧</h2>
@@ -138,39 +153,66 @@
   </div>
 <% end %>
 
+<!-- タブ切り替え -->
+<div class="fare-tabs">
+  <ul class="tab-list">
+    <li class="<%= params[:anonymous] == "true" ? '' : 'active' %>">
+      <%= link_to "地点別", fares_path %>
+    </li>
+    <li class="<%= params[:anonymous] == "true" ? 'active' : '' %>">
+      <%= link_to "距離別", fares_path(anonymous: "true") %>
+    </li>
+  </ul>
+</div>
 
+<!-- 運賃一覧テーブル -->
 <table>
   <thead>
     <tr>
-      <th><%= sort_link("departure_furigana", "出発地") %></th>
-      <th><%= sort_link("arrival_furigana", "到着地") %></th>
+      <% unless params[:anonymous] == "true" %>
+        <th><%= sort_link("departure_furigana", "出発地") %></th>
+        <th><%= sort_link("arrival_furigana", "到着地") %></th>
+      <% end %>
       <th><%= sort_link("distance", "距離（km）") %></th>
       <th><%= sort_link("fare_small", "小型") %></th>
       <th><%= sort_link("fare_medium", "中型") %></th>
       <th><%= sort_link("fare_large", "大型") %></th>
-      <th>詳細</th>
+      <th><%= params[:anonymous] == "true" ? "編集" : "詳細" %></th>
     </tr>
   </thead>
-  <tbody>
-  <% grouped_fares = @fares.group_by(&:departure) %>
-  <% grouped_fares.each do |departure, fares| %>
-    <% fares.each_with_index do |fare, index| %>
-      <tr>
-        <% if index == 0 %>
-          <td rowspan="<%= fares.size %>"><%= fare.departure %></td>
-        <% end %>
-        <td><%= fare.arrival %></td>
-        <td><%= fare.distance.present? ? "#{fare.distance} km" : "-" %></td>
-        <td><%= number_to_currency(fare.fare_small, unit: "\u00a5", precision: 0) %></td>
-        <td><%= number_to_currency(fare.fare_medium, unit: "\u00a5", precision: 0) %></td>
-        <td><%= number_to_currency(fare.fare_large, unit: "\u00a5", precision: 0) %></td>
-        <td><%= link_to "詳細", fare_path(fare), class: "btn-table detail" %></td>
-      </tr>
-    <% end %>
-  <% end %>
-</tbody>
 
+  <tbody>
+    <% if params[:anonymous] == "true" %>
+      <% @fares.each do |fare| %>
+        <tr>
+          <td><%= fare.distance.present? ? "#{fare.distance} km" : "-" %></td>
+          <td><%= number_to_currency(fare.fare_small, unit: "¥", precision: 0) %></td>
+          <td><%= number_to_currency(fare.fare_medium, unit: "¥", precision: 0) %></td>
+          <td><%= number_to_currency(fare.fare_large, unit: "¥", precision: 0) %></td>
+          <td><%= link_to "編集", edit_fare_path(fare), class: "btn-table detail" %></td>
+        </tr>
+      <% end %>
+    <% else %>
+      <% grouped_fares = @fares.group_by(&:departure) %>
+      <% grouped_fares.each do |departure, fares| %>
+        <% fares.each_with_index do |fare, index| %>
+          <tr>
+            <% if index == 0 %>
+              <td rowspan="<%= fares.size %>"><%= fare.departure %></td>
+            <% end %>
+            <td><%= fare.arrival %></td>
+            <td><%= fare.distance.present? ? "#{fare.distance} km" : "-" %></td>
+            <td><%= number_to_currency(fare.fare_small, unit: "¥", precision: 0) %></td>
+            <td><%= number_to_currency(fare.fare_medium, unit: "¥", precision: 0) %></td>
+            <td><%= number_to_currency(fare.fare_large, unit: "¥", precision: 0) %></td>
+            <td><%= link_to "詳細", fare_path(fare), class: "btn-table detail" %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    <% end %>
+  </tbody>
 </table>
+
 
 
 <style>
@@ -526,7 +568,42 @@ thead th.sort-desc a::after {
 .csv-upload-form input[type="submit"]:hover {
   background-color: #1a252f;
 }
+.fare-tabs {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+}
 
+.tab-list {
+  list-style: none;
+  display: inline-block;
+  padding: 0;
+}
+
+.tab-list li {
+  display: inline-block;
+  margin: 0 0.5rem;
+}
+
+.tab-list li a {
+  text-decoration: none;
+  padding: 0.5rem 1.2rem;
+  background-color: #ddd;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #333;
+  transition: 0.2s;
+}
+
+.tab-list li.active a {
+  background-color: #2c3e50;
+  color: white;
+}
+
+.tab-list li a:hover {
+  background-color: #aaa;
+  color: white;
+}
 
 </style>
 <script>

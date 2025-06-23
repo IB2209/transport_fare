@@ -1,78 +1,129 @@
-
 <div class="max480">
   <div class="fare-logo-top">
     <%= image_tag("logo.jpg", alt: "ロゴ", class: "fare-logo-img") %>
   </div>
   <h1 class="tab-title" style="text-align: center;">陸送料検索</h1>
 
+  <!-- タブボタン -->
+  <div class="tab-buttons">
+    <button type="button" class="tab-btn active" data-tab="place-tab">地点検索</button>
+    <button type="button" class="tab-btn" data-tab="distance-tab">距離検索</button>
+  </div>
+
+  <!-- 地点検索フォーム -->
+  <div id="place-tab" class="tab-content active">
+    <%= form_with url: search_fares_path, method: :get, local: true do %>
+      <div class="search-form">
+        <div class="label">
+          <label>　- 出発地 -</label>
+          <select name="departure" id="departure_id" class="pad searchable-select">
+            <option value="" <%= "selected" if params[:departure].blank? %>>選択してください</option>
+            <option value="all" <%= "selected" if params[:departure] == "all" %>>全て</option>
+            <% @grouped_departure_options.each do |group, options| %>
+              <optgroup label="<%= group %>">
+                <% options.each do |option| %>
+                  <option value="<%= option[:value] %>" data-furigana="<%= option[:furigana] %>" <%= "selected" if params[:departure] == option[:value] %>>
+                    <%= option[:label] %>
+                  </option>
+                <% end %>
+              </optgroup>
+            <% end %>
+          </select>
+        </div>
+
+        <div class="label">
+          <label>　- 到着地 -</label>
+          <select name="arrival" id="arrival_id" class="pad searchable-select">
+            <option value="" <%= "selected" if params[:arrival].blank? %>>選択してください</option>
+            <option value="all" <%= "selected" if params[:arrival] == "all" %>>全て</option>
+            <% @grouped_arrival_options.each do |group, options| %>
+              <optgroup label="<%= group %>">
+                <% options.each do |option| %>
+                  <option value="<%= option[:value] %>" data-furigana="<%= option[:furigana] %>" <%= "selected" if params[:arrival] == option[:value] %>>
+                    <%= option[:label] %>
+                  </option>
+                <% end %>
+              </optgroup>
+            <% end %>
+          </select>
+        </div>
+
+        <div class="label">
+          <% if params[:departure].present? || params[:arrival].present? %>
+            <%= link_to "リセット", search_fares_path, class: "btn-reset" %>
+          <% end %>
+          <%= submit_tag "検索", class: "btn" %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if params[:departure].present? || params[:arrival].present? %>
+      <% if @grouped_fares.blank? %>
+        <p class="no-results">該当する運賃データはありません</p>
+      <% else %>
+        <% @grouped_fares.each do |(departure, arrival), fares| %>
+          <div class="fare-card">
+            <div class="fare-header">
+              <span class="fare-route"><%= departure %> ▶︎ <%= arrival %></span>
+            </div>
+            <div class="fare-prices">
+              <% fares.each do |fare| %>
+                <div class="fare-row">
+                  <strong>小型:</strong> <%= number_to_currency(fare.fare_small, unit: "¥", precision: 0) %> /
+                  <strong>中型:</strong> <%= number_to_currency(fare.fare_medium, unit: "¥", precision: 0) %> /
+                  <strong>大型:</strong> <%= number_to_currency(fare.fare_large, unit: "¥", precision: 0) %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- 距離検索フォーム（CSV登録データのみ） -->
+  <div id="distance-tab" class="tab-content">
   <%= form_with url: search_fares_path, method: :get, local: true do %>
+    <%= hidden_field_tag :tab, "distance" %>
     <div class="search-form">
       <div class="label">
-        <label>　- 出発地 -</label>
-        <select name="departure" id="departure_id" class="pad searchable-select">
-          <option value="" <%= "selected" if params[:departure].blank? %>>選択してください</option>
-          <option value="all" <%= "selected" if params[:departure] == "all" %>>全て</option>
-          <% @grouped_departure_options.each do |group, options| %>
-            <optgroup label="<%= group %>">
-              <% options.each do |option| %>
-                <option value="<%= option[:value] %>" data-furigana="<%= option[:furigana] %>" <%= "selected" if params[:departure] == option[:value] %>>
-                  <%= option[:label] %>
-                </option>
-              <% end %>
-            </optgroup>
-          <% end %>
-        </select>
+        <label for="distance">距離（km）</label>
+        <input type="number" name="distance" id="distance" class="form-control" value="<%= params[:distance] %>" required>
       </div>
-
-      <div class="label">
-        <label>　- 到着地 -</label>
-        <select name="arrival" id="arrival_id" class="pad searchable-select">
-          <option value="" <%= "selected" if params[:arrival].blank? %>>選択してください</option>
-          <option value="all" <%= "selected" if params[:arrival] == "all" %>>全て</option>
-          <% @grouped_arrival_options.each do |group, options| %>
-            <optgroup label="<%= group %>">
-              <% options.each do |option| %>
-                <option value="<%= option[:value] %>" data-furigana="<%= option[:furigana] %>" <%= "selected" if params[:arrival] == option[:value] %>>
-                  <%= option[:label] %>
-                </option>
-              <% end %>
-            </optgroup>
-          <% end %>
-        </select>
-      </div>
-
-      <div class="label">
-        <% if params[:departure].present? || params[:arrival].present? %>
-          <%= link_to "リセット", search_fares_path, class: "btn-reset" %>
-        <% end %>
-        <%= submit_tag "検索", class: "btn" %>
-      </div>
+      <%= submit_tag "見積を表示", class: "btn" %>
     </div>
   <% end %>
 
-  <% if params[:departure].present? || params[:arrival].present? %>
-    <% if @grouped_fares.blank? %>
-      <p class="no-results">該当する運賃データはありません</p>
-    <% else %>
-      <% @grouped_fares.each do |(departure, arrival), fares| %>
-        <div class="fare-card">
-          <div class="fare-header">
-            <span class="fare-route"><%= departure %> ▶︎ <%= arrival %></span>
-          </div>
-          <div class="fare-prices">
-            <% fares.each do |fare| %>
-              <div class="fare-row">
-                <strong>小型:</strong> <%= number_to_currency(fare.fare_small, unit: "\u00a5", precision: 0) %> /
-                <strong>中型:</strong> <%= number_to_currency(fare.fare_medium, unit: "\u00a5", precision: 0) %> /
-                <strong>大型:</strong> <%= number_to_currency(fare.fare_large, unit: "\u00a5", precision: 0) %>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    <% end %>
+  <% if @fare_distance_record.present? %>
+    <div class="estimate-result">
+      <h3><%= @distance %> kmの陸送料</h3>
+      <ul>
+        <li><strong>小型：</strong> ¥<%= number_with_delimiter(@fare_distance_record.fare_small) %></li>
+        <li><strong>中型：</strong> ¥<%= number_with_delimiter(@fare_distance_record.fare_medium) %></li>
+        <li><strong>大型：</strong> ¥<%= number_with_delimiter(@fare_distance_record.fare_large) %></li>
+      </ul>
+    </div>
+  <% elsif params[:distance].present? %>
+    <p class="no-results">該当する距離料金データが見つかりません</p>
   <% end %>
 </div>
+
+<div class="fare-notes">
+  <h3>ご注意事項</h3>
+  <ul class="fare-notes-list">
+    <li>※消費税は別途いただきます。</li>
+    <li>※保険料は輸送費に含まれてます。</li>
+    <li>
+      ※燃料が空の場合は、目的地までの燃料を給油して納車いたします。<br>
+      燃料代は陸送費と併せてご請求させていただきます。
+    </li>
+    <li>※北海道内限定輸送料金になります。</li>
+  </ul>
+</div>
+
+
+
+
 
 <style>
 /* ===== 全体コンテナ ===== */
@@ -294,6 +345,118 @@ select.pad option[value=""] {
   opacity: 0.95;
 }
 
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+  gap: 1rem;
+}
+
+.tab-btn {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  background-color: #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.tab-btn.active {
+  background-color: #2c3e50;
+  color: white;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* 距離入力フィールドの見た目を統一 */
+input.form-control[type="number"] {
+  padding: 1rem;
+  width: 100%;
+  font-size: 0.95rem;
+  background-color: #fff;
+  border: 1px solid #2c3e50;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: #333;
+  font-weight: bold;
+}
+
+/* 見積結果のスタイル */
+.estimate-result {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.estimate-result h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  color: #2c3e50;
+}
+
+.estimate-result ul {
+  padding-left: 1rem;
+}
+
+.estimate-result li {
+  margin-bottom: 0.3rem;
+}
+
+.fare-notes {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.8rem 0.7rem;
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #444;
+}
+
+.fare-notes h3 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.8rem;
+  color: #2c3e50;
+  text-align: center;
+}
+
+
+
+.fare-notes li {
+  margin-bottom: 0.4rem;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.fare-notes-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.fare-notes-list li {
+  position: relative;
+  padding-left: 1.6em;
+  text-indent: -1.0em;
+  margin-bottom: 0.6em;
+  line-height: 1.7;
+}
 
 </style>
 
@@ -336,6 +499,35 @@ select.pad option[value=""] {
     });
   }
 
-  document.addEventListener("DOMContentLoaded", initSelect2);
+  document.addEventListener("DOMContentLoaded", () => {
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = document.querySelectorAll(".tab-content");
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        tabButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const tab = btn.dataset.tab;
+        tabContents.forEach(content => {
+          content.classList.toggle("active", content.id === tab);
+        });
+      });
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedTab = urlParams.get("tab");
+    if (selectedTab === "distance") {
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === "distance-tab");
+      });
+      document.querySelectorAll(".tab-content").forEach(content => {
+        content.classList.toggle("active", content.id === "distance-tab");
+      });
+    }
+
+    initSelect2();
+  });
+
   document.addEventListener("turbo:load", initSelect2);
 </script>
