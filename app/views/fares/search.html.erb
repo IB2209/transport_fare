@@ -86,10 +86,13 @@
   <%= form_with url: search_fares_path, method: :get, local: true do %>
     <%= hidden_field_tag :tab, "distance" %>
     <div class="search-form">
-      <div class="label">
-        <label for="distance">距離（km）</label>
-        <input type="number" name="distance" id="distance" class="form-control" value="<%= params[:distance] %>" required>
-      </div>
+      <div class="label label-distance">
+  <label for="distance">距離を入力してください</label>
+  <div class="distance-input-wrapper">
+    <input type="number" name="distance" id="distance" class="form-control" value="<%= params[:distance] %>" required>
+    <span class="unit-km">km</span>
+  </div>
+</div>
       <%= submit_tag "見積を表示", class: "btn" %>
     </div>
   <% end %>
@@ -118,6 +121,7 @@
       燃料代は陸送費と併せてご請求させていただきます。
     </li>
     <li>※北海道内限定輸送料金になります。</li>
+    <li>※小型(〜3t未満) / 中型(4t〜8t未満) / 大型(〜6t以上)</li>
   </ul>
 </div>
 
@@ -141,6 +145,7 @@
 .search-form {
   margin-bottom: 1.5rem;
   color: rgb(55, 55, 55);
+  
 }
 
 .label {
@@ -353,13 +358,16 @@ select.pad option[value=""] {
 }
 
 .tab-btn {
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 3rem;
   border: none;
   background-color: #ddd;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
   font-weight: bold;
   transition: background-color 0.3s ease;
+  color: #2c3e50;
+
 }
 
 .tab-btn.active {
@@ -378,14 +386,16 @@ select.pad option[value=""] {
 /* 距離入力フィールドの見た目を統一 */
 input.form-control[type="number"] {
   padding: 1rem;
-  width: 100%;
-  font-size: 0.95rem;
+  width: 80%;
+  font-size: 1.2rem;
   background-color: #fff;
   border: 1px solid #2c3e50;
   border-radius: 4px;
   box-sizing: border-box;
   color: #333;
   font-weight: bold;
+  margin-right: 0.5rem;
+  display: block;
 }
 
 /* 見積結果のスタイル */
@@ -404,6 +414,7 @@ input.form-control[type="number"] {
   font-size: 1.1rem;
   margin-bottom: 0.8rem;
   color: #2c3e50;
+  text-align: center;
 }
 
 .estimate-result ul {
@@ -433,8 +444,6 @@ input.form-control[type="number"] {
   text-align: center;
 }
 
-
-
 .fare-notes li {
   margin-bottom: 0.4rem;
 }
@@ -457,6 +466,33 @@ ul {
   margin-bottom: 0.6em;
   line-height: 1.7;
 }
+
+.label-distance label {
+  display: block;
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.distance-input-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.distance-input-wrapper input[type="number"] {
+  width: 70%;
+  text-align: right;
+  color: #2c3e50;
+}
+
+.unit-km {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
 
 </style>
 
