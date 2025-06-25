@@ -1,4 +1,3 @@
-// app/javascript/controllers/select2_init_controller.js
 import { Controller } from "@hotwired/stimulus"
 import $ from "jquery"
 import "select2"
@@ -8,31 +7,29 @@ export default class extends Controller {
     const $departure = $('#departure-select')
     const $arrival = $('#arrival-select')
 
-    if ($departure.length) {
-      $departure.select2({
-        width: '100%',
-        placeholder: "出発地を選択",
-        allowClear: true,
-        language: {
-          inputTooShort: () => "キーワードを入力",
-          noResults: () => "一致する項目が見つかりません",
-          searching: () => "検索中…"
+    const commonOptions = {
+      width: '100%',
+      placeholder: "選択してください",
+      allowClear: true,
+      language: {
+        inputTooShort: () => "キーワードを入力",
+        noResults: () => "一致する項目が見つかりません",
+        searching: () => "検索中…"
+      },
+      matcher: function(params, data) {
+        if ($.trim(params.term) === '') return data;
+        const term = params.term.toLowerCase();
+        const text = data.text.toLowerCase();
+        const furigana = $(data.element).data('furigana')?.toLowerCase() || '';
+        if (text.includes(term) || furigana.includes(term)) {
+          return data;
         }
-      })
+        return null;
+      }
     }
 
-    if ($arrival.length) {
-      $arrival.select2({
-        width: '100%',
-        placeholder: "到着地を選択",
-        allowClear: true,
-        language: {
-          inputTooShort: () => "キーワードを入力",
-          noResults: () => "一致する項目が見つかりません",
-          searching: () => "検索中…"
-        }
-      })
-    }
+    if ($departure.length) $departure.select2(commonOptions)
+    if ($arrival.length) $arrival.select2(commonOptions)
 
     $departure.add($arrival).on('select2:open', () => {
       setTimeout(() => {
