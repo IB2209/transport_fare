@@ -36,27 +36,40 @@ class FaresController < ApplicationController
   end
 
   def search
-    @selected_departure = params[:departure]
-    @selected_arrival   = params[:arrival]
-    @distance           = params[:distance]
+    @selected_departure        = params[:departure]
+    @selected_arrival          = params[:arrival]
+    @departure_furigana_input  = params[:departure_furigana].to_s.strip
+    @arrival_furigana_input    = params[:arrival_furigana].to_s.strip
+    @distance                  = params[:distance]
 
-    # 地点検索用
+    # 検索対象
     @fares = Fare.where.not(departure: [nil, ''], arrival: [nil, ''])
 
     if @selected_departure.present? && @selected_departure != "all"
-      @fares = @fares.where(departure: @selected_departure)
+      normalized = normalize_kana(@selected_departure)
+      @fares = @fares.where("departure LIKE ? OR departure_furigana LIKE ?", "%#{@selected_departure}%", "%#{normalized}%")
     end
+    
     if @selected_arrival.present? && @selected_arrival != "all"
-      @fares = @fares.where(arrival: @selected_arrival)
+      normalized = normalize_kana(@selected_arrival)
+      @fares = @fares.where("arrival LIKE ? OR arrival_furigana LIKE ?", "%#{@selected_arrival}%", "%#{normalized}%")
+    end
+    
+
+    if @departure_furigana_input.present?
+      normalized = normalize_kana(@departure_furigana_input)
+      @fares = @fares.where("departure_furigana LIKE ?", "%#{normalized}%")
+    end
+    if @arrival_furigana_input.present?
+      normalized = normalize_kana(@arrival_furigana_input)
+      @fares = @fares.where("arrival_furigana LIKE ?", "%#{normalized}%")
     end
 
     @grouped_fares = @fares.group_by { |f| [f.departure, f.arrival] }
 
-    # セレクトボックス用
     @grouped_departure_options = grouped_furigana_options(:departure, :departure_furigana)
     @grouped_arrival_options   = grouped_furigana_options(:arrival, :arrival_furigana)
 
-    # 距離検索用
     if @distance.present?
       distance_float = @distance.to_f
       rounded_distance = (distance_float / 10).ceil * 10
@@ -134,14 +147,14 @@ class FaresController < ApplicationController
 
   def grouped_furigana_options(field, furigana_field)
     grouped = {}
-  
+
     Fare.select(field, furigana_field).distinct.order(furigana_field).each do |fare|
       value = fare.send(field).to_s.strip
-      next if value.blank?  # ← 空文字やnilを除外
-  
+      next if value.blank?
+
       furigana = normalize_kana(fare.send(furigana_field).to_s.strip)
       head = furigana[0] || "その他"
-  
+
       group =
         case head
         when /[あ-お]/ then "あ行"
@@ -161,7 +174,7 @@ class FaresController < ApplicationController
         when /[u-z]/i then "U〜Z"
         else "その他"
         end
-  
+
       grouped[group] ||= []
       grouped[group] << {
         label: value,
@@ -169,12 +182,10 @@ class FaresController < ApplicationController
         furigana: furigana
       }
     end
-  
-    # 空のグループ（中身が空配列）を削除
+
     grouped.delete_if { |_, options| options.empty? }
-  
+
     group_order = %w[あ行 か行 さ行 た行 な行 は行 ま行 や行 ら行 わ行 A〜E F〜J K〜O P〜T U〜Z その他]
     grouped.sort_by { |group, _| group_order.index(group) || 999 }.to_h
   end
-  
 end
