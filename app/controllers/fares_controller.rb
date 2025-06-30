@@ -134,11 +134,14 @@ class FaresController < ApplicationController
 
   def grouped_furigana_options(field, furigana_field)
     grouped = {}
-
+  
     Fare.select(field, furigana_field).distinct.order(furigana_field).each do |fare|
+      value = fare.send(field).to_s.strip
+      next if value.blank?  # ← 空文字やnilを除外
+  
       furigana = normalize_kana(fare.send(furigana_field).to_s.strip)
       head = furigana[0] || "その他"
-
+  
       group =
         case head
         when /[あ-お]/ then "あ行"
@@ -158,16 +161,20 @@ class FaresController < ApplicationController
         when /[u-z]/i then "U〜Z"
         else "その他"
         end
-
+  
       grouped[group] ||= []
       grouped[group] << {
-        label: fare.send(field),
-        value: fare.send(field),
+        label: value,
+        value: value,
         furigana: furigana
       }
     end
-
+  
+    # 空のグループ（中身が空配列）を削除
+    grouped.delete_if { |_, options| options.empty? }
+  
     group_order = %w[あ行 か行 さ行 た行 な行 は行 ま行 や行 ら行 わ行 A〜E F〜J K〜O P〜T U〜Z その他]
     grouped.sort_by { |group, _| group_order.index(group) || 999 }.to_h
   end
+  
 end
