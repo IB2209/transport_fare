@@ -2,6 +2,7 @@ require "nkf"
 require "csv"
 
 class FaresController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:search]
   before_action :set_fare, only: [:show, :edit, :update, :destroy]
 
   def index
